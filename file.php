@@ -101,7 +101,11 @@ class Article {
         return true;
     }
 
-    
+    public function archive() {
+        if($this->status == 'archive') return false;
+        $this->status = 'archive';
+        return true;
+    }
 
 
 }
