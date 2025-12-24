@@ -38,12 +38,37 @@ class Author extends User {
 }
 
 class Editor extends User {
-    private string $moderationLevel;
+    protected string $moderationLevel;
+
+    public function __construct($id, $username, $email, $password, $moderationLevel)
+    {   
+        $this->id = $id;
+        $this->username = $username;
+        $this->password = $password;
+        $this->email = $email;
+        $this->role = 'editor';
+        $this->createdAt = new DateTime('today');
+        $this->lastLogin = null;
+        $this->moderationLevel = $moderationLevel;
+    }
 
 }
 
-class Admin extends User {
+class Admin extends Editor {
     private bool $isSuperAdmin;
+
+    public function __construct($id, $username, $email, $password, $isSuperAdmin)
+    {   
+        $this->id = $id;
+        $this->username = $username;
+        $this->password = $password;
+        $this->email = $email;
+        $this->role = 'editor';
+        $this->createdAt = new DateTime('today');
+        $this->lastLogin = null;
+        $this->moderationLevel = 'cheif';
+        $this->isSuperAdmin = $isSuperAdmin;
+    }
 }
 
 class Article {
