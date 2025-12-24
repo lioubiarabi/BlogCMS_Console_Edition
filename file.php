@@ -15,6 +15,10 @@ class User {
         else return false;
     }
 
+    public function updateLastLogin() {
+        $this->lastLogin = new DateTime();
+    }
+
 }
 
 class Author extends User {
@@ -27,7 +31,7 @@ class Author extends User {
         $this->password = $password;
         $this->email = $email;
         $this->role = 'author';
-        $this->createdAt = new DateTime();
+        $this->createdAt = new DateTime('today');
         $this->lastLogin = null;
         $this->bio = $bio;
     }
@@ -46,13 +50,26 @@ class Article {
     private int $id;
     private string $title;
     private string $content;
-    private string $excerpt;
     private string $status;
     private User $author;
     private array $comments = [];
     private DateTime $createdAt;
-    private ?DateTime $updatedAt;
+    private DateTime $updatedAt;
     private ?DateTime $publishedAt;
+
+    public function __construct($id, $title, $content, $status, $author)
+    {
+        $this->id = $id;
+        $this->title = $title;
+        $this->content = $content;
+        $this->status = $status;
+        $this->author = $author;
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
+        $this->publishedAt = null;
+
+    }
+
 
 }
 
