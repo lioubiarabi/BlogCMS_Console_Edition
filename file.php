@@ -77,7 +77,7 @@ class Article {
     private string $title;
     private string $content;
     private string $status;
-    private User $author;
+    private string $author;
     private array $comments = [];
     private DateTime $createdAt;
     private DateTime $updatedAt;
@@ -135,11 +135,16 @@ class Category {
 }
 
 $users = [
-    new Author(1, "usera", "usera@email.com", "password", "this author hehe"),
-    new Author(2, "userb", "userb@email.com", "password", "this author hehe"),
-    new Author(3, "userc", "userc@email.com", "password", "this author hehe")
+    new Author(1, "user1", "user1@email.com", "password", "this author hehe"),
+    new Author(2, "user2", "user2@email.com", "password", "this author hehe"),
+    new Author(3, "user3", "user3@email.com", "password", "this author hehe")
 ];
 
-print_r($users[0]->auth('usera@email.com' , 'password'));
+$articles = [
+    new Article(1, 'title1', 'content1', 'user1'),
+    new Article(2, 'title2', 'content2', 'user2'),
+    new Article(3, 'title3', 'content3', 'user3'),
+];
+
 
 ?>
