@@ -80,6 +80,15 @@ class Category {
     private ?int $parentId;
     private DateTime $createdAt;
 
+    public function __construct($id, $name, $description, $parentId)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->description = $description;
+        $this->parentId = $parentId;
+        $this->createdAt = new DateTime();
+    }
+
 }
 
 $users = [
