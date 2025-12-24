@@ -41,5 +41,13 @@ class Article {
 
 }
 
+class Category {
+    private int $id;
+    private string $name;
+    private string $description;
+    private ?int $parentId;
+    private DateTime $createdAt;
+
+}
 
 ?>
