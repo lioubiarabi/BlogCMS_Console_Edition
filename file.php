@@ -82,18 +82,26 @@ class Article {
     private DateTime $updatedAt;
     private ?DateTime $publishedAt;
 
-    public function __construct($id, $title, $content, $status, $author)
+    public function __construct($id, $title, $content, $author)
     {
         $this->id = $id;
         $this->title = $title;
         $this->content = $content;
-        $this->status = $status;
+        $this->status = 'draft';
         $this->author = $author;
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
         $this->publishedAt = null;
 
     }
+
+    public function publish() {
+        if($this->status == 'public') return false;
+        $this->status = 'public';
+        return true;
+    }
+
+    
 
 
 }
