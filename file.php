@@ -17,6 +17,7 @@ class User {
 
     public function updateLastLogin() {
         $this->lastLogin = new DateTime();
+        return $this;
     }
 
 }
@@ -105,6 +106,11 @@ class Article {
         if($this->status == 'archive') return false;
         $this->status = 'archive';
         return true;
+    }
+
+    public function updateContent($content) {
+        $this->content = $content;
+        return $this;
     }
 
 
