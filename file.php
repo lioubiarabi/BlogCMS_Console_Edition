@@ -27,6 +27,19 @@ class Admin extends User {
     private Bool $isSuperAdmin;
 }
 
+class Article {
+    private int $id;
+    private string $title;
+    private string $content;
+    private string $excerpt;
+    private string $status;
+    private User $author;
+    private array $comments = [];
+    private DateTime $createdAt;
+    private ?DateTime $updatedAt;
+    private ?DateTime $publishedAt;
+
+}
 
 
 ?>
