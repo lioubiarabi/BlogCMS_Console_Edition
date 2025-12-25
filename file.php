@@ -35,6 +35,8 @@ class Author extends User {
         $this->lastLogin = null;
         $this->bio = $bio;
     }
+
+
 }
 
 class Editor extends User {
@@ -127,25 +129,27 @@ class Article {
         $this->comments['status'] = 'refused';
     }
 
-
-
 }
 
 class Category {
     private int $id;
     private string $name;
     private string $description;
-    private ?int $parentId;
+    private string $path;
+    private array $articles = [];
     private DateTime $createdAt;
 
-    public function __construct($id, $name, $description, $parentId)
+    public function __construct($id, $name, $description, $path)
     {
         $this->id = $id;
         $this->name = $name;
         $this->description = $description;
-        $this->parentId = $parentId;
+        $this->path = $path;
         $this->createdAt = new DateTime();
     }
+
+
+    
 
 }
 
@@ -160,6 +164,8 @@ $articles = [
     new Article(2, 'title2', 'content2', 'user2'),
     new Article(3, 'title3', 'content3', 'user3'),
 ];
+
+
 
 
 ?>
