@@ -1,6 +1,7 @@
 <?php
 
-class User {
+class User
+{
     protected int $id;
     protected string $username;
     protected string $email;
@@ -8,24 +9,26 @@ class User {
     protected string $role;
     protected DateTime $createdAt;
     protected ?DateTime $lastLogin;
-    
 
-    public function auth($loginEmail, $loginPass) {
-        if($this->email == $loginEmail && $this->password == $loginPass) return true;
+
+    public function auth($loginEmail, $loginPass)
+    {
+        if ($this->email == $loginEmail && $this->password == $loginPass) return true;
         else return false;
     }
 
-    public function updateLastLogin() {
+    public function updateLastLogin()
+    {
         $this->lastLogin = new DateTime();
     }
-
 }
 
-class Author extends User {
+class Author extends User
+{
     private string $bio;
 
     public function __construct($id, $username, $email, $password, $bio)
-    {   
+    {
         $this->id = $id;
         $this->username = $username;
         $this->password = $password;
@@ -35,15 +38,14 @@ class Author extends User {
         $this->lastLogin = null;
         $this->bio = $bio;
     }
-
-
 }
 
-class Editor extends User {
+class Editor extends User
+{
     protected string $moderationLevel;
 
     public function __construct($id, $username, $email, $password, $moderationLevel)
-    {   
+    {
         $this->id = $id;
         $this->username = $username;
         $this->password = $password;
@@ -53,14 +55,14 @@ class Editor extends User {
         $this->lastLogin = null;
         $this->moderationLevel = $moderationLevel;
     }
-
 }
 
-class Admin extends Editor {
+class Admin extends Editor
+{
     private bool $isSuperAdmin;
 
     public function __construct($id, $username, $email, $password, $isSuperAdmin)
-    {   
+    {
         $this->id = $id;
         $this->username = $username;
         $this->password = $password;
@@ -73,7 +75,8 @@ class Admin extends Editor {
     }
 }
 
-class Article {
+class Article
+{
     private int $id;
     private string $title;
     private string $content;
@@ -94,44 +97,50 @@ class Article {
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
         $this->publishedAt = null;
-
     }
 
-    public function publish() {
-        if($this->status == 'public') return false;
+    public function publish()
+    {
+        if ($this->status == 'public') return false;
         $this->status = 'public';
         return true;
     }
 
-    public function archive() {
-        if($this->status == 'archive') return false;
+    public function archive()
+    {
+        if ($this->status == 'archive') return false;
         $this->status = 'archive';
         return true;
     }
 
-    public function updateContent($content) {
+    public function updateContent($content)
+    {
         $this->content = $content;
     }
 
-    public function getComments() {
+    public function getComments()
+    {
         return $this->comments;
     }
 
-    public function addComment($username, $content) {
-        $this->comments = ['username' => $username,'content' =>  $content, 'status'=> 'pending'];
+    public function addComment($username, $content)
+    {
+        $this->comments = ['username' => $username, 'content' =>  $content, 'status' => 'pending'];
     }
 
-    public function approveComment() {
+    public function approveComment()
+    {
         $this->comments['status'] = 'approved';
     }
 
-    public function refuseComment() {
+    public function refuseComment()
+    {
         $this->comments['status'] = 'refused';
     }
-
 }
 
-class Category {
+class Category
+{
     private int $id;
     private string $name;
     private string $description;
@@ -149,32 +158,46 @@ class Category {
     }
 
 
-    public function addArticle(Article $article) {
+    public function addArticle(Article $article)
+    {
         $this->articles[] = $article;
+    }
+}
+
+
+class collection
+{
+    private ?User $current_user;
+    private array $users = [];
+    private array $categories = [];
+
+    public function __construct()
+    {   
+        $this->current_user = null;
+
+        $this->users = [
+            new Author(1, "user1", "user1@email.com", "password", "this author hehe"),
+            new Author(2, "user2", "user2@email.com", "password", "this author hehe"),
+            new Author(3, "user3", "user3@email.com", "password", "this author hehe")
+        ];
+
+        $this->categories = [
+            new Category(1, "Techno", "this is all about techno", "Techno"),
+            new Category(2, "coding", "this is all about techno/coding", "Techno/coding"),
+            new Category(3, "php", "this is all about techno/coding/php", "Techno/coding/php"),
+            new Category(4, "Learn", "this is all about Learn", "Learn"),
+
+        ];
+
+        $this->categories[0]->addArticle(new Article(1, 'title1', 'content1', 'user1'));
+        $this->categories[2]->addArticle(new Article(2, 'title2', 'content2', 'user2'));
+        $this->categories[3]->addArticle(new Article(3, 'title3', 'content3', 'user3'));
+    }
+
+    public function isLoggedIn() {
+        if($this->current_user!=null) return true;
+        return false;
     }
 
     
-
 }
-
-$users = [
-    new Author(1, "user1", "user1@email.com", "password", "this author hehe"),
-    new Author(2, "user2", "user2@email.com", "password", "this author hehe"),
-    new Author(3, "user3", "user3@email.com", "password", "this author hehe")
-];
-
-$categories = [
-    new Category(1, "Techno", "this is all about techno", "Techno"),
-    new Category(2, "coding", "this is all about techno/coding", "Techno/coding"),
-    new Category(3, "php", "this is all about techno/coding/php", "Techno/coding/php"),
-    new Category(4, "Learn", "this is all about Learn", "Learn"),
-    
-];
-
-$categories[0]->addArticle(new Article(1, 'title1', 'content1', 'user1'));
-$categories[2]->addArticle(new Article(2, 'title2', 'content2', 'user2'));
-$categories[3]->addArticle(new Article(3, 'title3', 'content3', 'user3'));
-
-print_r($categories);
-
-?>
