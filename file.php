@@ -149,6 +149,10 @@ class Category {
     }
 
 
+    public function addArticle(Article $article) {
+        $this->articles[] = $article;
+    }
+
     
 
 }
@@ -159,13 +163,18 @@ $users = [
     new Author(3, "user3", "user3@email.com", "password", "this author hehe")
 ];
 
-$articles = [
-    new Article(1, 'title1', 'content1', 'user1'),
-    new Article(2, 'title2', 'content2', 'user2'),
-    new Article(3, 'title3', 'content3', 'user3'),
+$categories = [
+    new Category(1, "Techno", "this is all about techno", "Techno"),
+    new Category(2, "coding", "this is all about techno/coding", "Techno/coding"),
+    new Category(3, "php", "this is all about techno/coding/php", "Techno/coding/php"),
+    new Category(4, "Learn", "this is all about Learn", "Learn"),
+    
 ];
 
+$categories[0]->addArticle(new Article(1, 'title1', 'content1', 'user1'));
+$categories[2]->addArticle(new Article(2, 'title2', 'content2', 'user2'));
+$categories[3]->addArticle(new Article(3, 'title3', 'content3', 'user3'));
 
-
+print_r($categories);
 
 ?>
