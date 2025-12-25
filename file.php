@@ -17,7 +17,6 @@ class User {
 
     public function updateLastLogin() {
         $this->lastLogin = new DateTime();
-        return $this;
     }
 
 }
@@ -110,8 +109,24 @@ class Article {
 
     public function updateContent($content) {
         $this->content = $content;
-        return $this;
     }
+
+    public function getComments() {
+        return $this->comments;
+    }
+
+    public function addComment($username, $content) {
+        $this->comments = ['username' => $username,'content' =>  $content, 'status'=> 'pending'];
+    }
+
+    public function approveComment() {
+        $this->comments['status'] = 'approved';
+    }
+
+    public function refuseComment() {
+        $this->comments['status'] = 'refused';
+    }
+
 
 
 }
