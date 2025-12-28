@@ -216,6 +216,14 @@ class collection
         }
         return false;
     }
+
+    public function getUserIds() {
+        return $this->newUser++;
+    }
+
+    public function addUser(User $user) {
+        $this->users[$user->username] = $user;
+    }
 }
 
 $db = new collection();
@@ -673,6 +681,41 @@ while (true) {
                                     $loop = false;
                                     break;
                                 case 1:
+                                    echo "Select Role (1. Author, 2. Editor, 3. Admin): ";
+                                    $roleChoice = (int)trim(fgets(STDIN));
+
+                                    echo "Enter Username: ";
+                                    $uName = trim(fgets(STDIN));
+                                    echo "Enter Email: ";
+                                    $uEmail = trim(fgets(STDIN));
+                                    echo "Enter Password: ";
+                                    $uPass = trim(fgets(STDIN));
+
+
+                                    $newUserObj = null;
+                                    switch ($roleChoice) {
+                                        case 1:
+                                            echo "Enter Bio: ";
+                                            $bio = trim(fgets(STDIN));
+                                            $newUserObj = new Author($db->getUserIds(), $uName, $uEmail, $uPass, $bio);
+                                            break;
+                                        case 2:
+                                            echo "Enter Moderation Level: ";
+                                            $mod = trim(fgets(STDIN));
+                                            $newUserObj = new Editor($db->getUserIds(), $uName, $uEmail, $uPass, $mod);
+                                            break;
+                                        case 3:
+                                            $newUserObj = new Admin($db->getUserIds(), $uName, $uEmail, $uPass, true);
+                                            break;
+                                        default:
+                                            echo "invalid role selected.\n";
+                                            break;
+                                    }
+
+                                    if ($newUserObj) {
+                                        $db->addUser($newUserObj);
+                                        echo "\nuser '$uName' created successfully.\n";
+                                    }
                                     break;
 
                                 case 2:
