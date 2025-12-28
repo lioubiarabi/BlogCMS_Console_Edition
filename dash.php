@@ -13,9 +13,9 @@ class collection
         $this->current_user = null;
 
         $this->users = [
-            new Author(1, "user1", "user1@email.com", "password", "this author hehe"),
-            new Author(2, "user2", "user2@email.com", "password", "this author hehe"),
-            new Author(3, "user3", "user3@email.com", "password", "this author hehe")
+            "user1" => new Author(1, "user1", "user", "user", "this author hehe"),
+            "user2" => new Author(2, "user2", "user2@email.com", "password", "this author hehe"),
+            "user3" => new Author(3, "user3", "user3@email.com", "password", "this author hehe")
         ];
 
         $this->categories = [
@@ -31,11 +31,6 @@ class collection
         $this->categories[3]->addArticle(new Article(3, 'title3', 'content3', 'user3'));
     }
 
-    public function isLoggedIn()
-    {
-        if ($this->current_user != null) return true;
-        return false;
-    }
 
     public function login($username, $password)
     {
@@ -47,37 +42,62 @@ class collection
             return false;
         }
     }
+
+    public function isLoggedIn()
+    {
+        if ($this->current_user != null) return true;
+        return false;
+    }
+
+    public function getUser()
+    {
+        if ($this->current_user != null) return $this->current_user->username;
+        return "Anonymous";
+    }
+
+    public function getRole()
+    {
+        if ($this->current_user != null) return $this->current_user->getRole();
+        return "visitor";
+    }
 }
 
 $db = new collection();
 
 while (true) {
 
-    echo "\n1. show all article\n";
-    echo "2. login to your account\n";
-    echo "0. exit\n";
-    echo "\n choose a number: ";
-    $chiox = trim(fgets(STDIN));
-
-    switch ($chiox) {
-        case 0:
-            exit;
-            break;
-        case 1:
-            
-            break;
-        case 2:
-            echo "Entre your email: ";
-            $email = trim(fgets(STDIN));
-            echo "Entre your password: ";
-            $password = trim(fgets(STDIN));
-
-            echo ($db->login($email, $password)) ? "Welcome back!\n" : "Wrong email/password!\n";
-            continue;
+    echo "Hello, Dear " . $db->getUser() . " || " . $db->getRole();
+    switch ($db->getRole()) {
+        case 'value':
+            # code...
             break;
 
         default:
-            echo "Please choose a correct number";
+            echo "\n1. show all article\n";
+            echo "2. login to your account\n";
+            echo "0. exit\n";
+            echo "\n choose a number: ";
+
+            switch (trim(fgets(STDIN))) {
+                case 0:
+                    exit;
+                    break;
+                case 1:
+
+                    break;
+                case 2:
+                    echo "Entre your email: ";
+                    $email = trim(fgets(STDIN));
+                    echo "Entre your password: ";
+                    $password = trim(fgets(STDIN));
+
+                    echo ($db->login($email, $password)) ? "Welcome back!\n" : "Wrong email/password!\n";
+                    break;
+
+                default:
+                    echo "Please choose a correct number";
+                    break;
+            }
             break;
     }
 }
