@@ -143,13 +143,37 @@ while (true) {
                     }
                     echo "\n\n";
 
-                    while (true) {
-                        echo "\n1. show all article\n";
-                        echo "2. show my articles\n";
-                        echo "0. logout\n";
+                    $artiLoop = true;
+                    while ($artiLoop) {
+                        echo "\n1. modify an article\n";
+                        echo "2. delete an article\n";
+                        echo "3. publish an article\n";
+                        echo "0. Go back to menu\n";
                         echo "\n choose a number: ";
 
-                        switch (trim(fgets(STDIN))) {
+                        $number = (int)trim(fgets(STDIN));
+                        switch ($number) {
+                            case 0:
+                                $artiLoop = false;
+                                break;
+                            case 1:
+                                echo "\nChoose an Article id: ";
+                                $idInput = (int)trim(fgets(STDIN));
+                                $index = $idInput - 1;
+
+                                if (isset($myArti[$index])) {
+                                    echo "Enter new content: ";
+                                    $newContent = trim(fgets(STDIN));
+                                    $myArti[$index]->updateContent($newContent);
+                                    echo "\narticle updated successfully.\n";
+                                    $artiLoop = false;
+                                } else {
+                                    echo "\narticle id not found.\n";
+                                }
+                                break;
+                            default:
+                                echo "please choose a coorect number\n";
+                                break;
                         }
                     }
 
