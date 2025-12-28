@@ -267,7 +267,62 @@ while (true) {
                                 break;
 
                             case 4:
+                                echo "\nwhich article number: ";
+                                $articleIndex = (int)trim(fgets(STDIN));
+                                $index = $articleIndex - 1;
 
+                                if (isset($pubArticles[$index])) {
+                                    $commentLoop = true;
+                                    while ($commentLoop) {
+                                        printf("\n%-5s %-15s %-30s %-10s %-20s\n", "id", "Username", "Comment", "status", "Created At");
+
+                                        echo str_repeat("=", 70) . "\n";
+
+                                        $comments = $pubArticles[$index]->getComments('all');
+                                        if (count($comments) == 0) echo "no comments yet\n";
+                                        foreach ($comments as $key => $comment) {
+                                            printf("%-5d %-15s %-30s %-10s %-20s\n", ($key + 1), $comment['username'], $comment['content'], $comment['status'], $comment['createdAt']);
+                                        }
+                                        echo "\n1. approve a comment\n";
+                                        echo "2. refuse a comment\n";
+                                        echo "0. Go back to menu\n";
+                                        echo "\n choose a number: ";
+
+                                        switch (trim(fgets(STDIN))) {
+                                            case 0:
+                                                $commentLoop = false;
+                                                break;
+
+                                            case 1:
+                                                echo "\nEnter comment id to APPROVE: ";
+                                                $cIndex = (int)trim(fgets(STDIN)) - 1;
+
+                                                if ($pubArticles[$index]->approveComment($cIndex)) {
+                                                    echo "\ncomment approved.\n";
+                                                } else {
+                                                    echo "\ncomment number not found.\n";
+                                                }
+                                                break;
+
+                                            case 2:
+                                                echo "\nEnter comment id to REFUSE:";
+                                                $cIndex = (int)trim(fgets(STDIN)) - 1;
+
+                                                if ($pubArticles[$index]->refuseComment($cIndex)) {
+                                                    echo "\ncomment refused.\n";
+                                                } else {
+                                                    echo "\ncomment number not found.\n";
+                                                }
+                                                break;
+
+                                            default:
+                                                echo "\nPlease choose a correct number\n";
+                                                break;
+                                        }
+                                    }
+                                } else {
+                                    echo "\narticle number not found.\n";
+                                }
                                 break;
                             default:
                                 echo "please choose a coorect number\n";
