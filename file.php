@@ -129,7 +129,7 @@ class Article
 
     public function addComment($username, $content)
     {
-        $this->comments = ['username' => $username, 'content' =>  $content, 'status' => 'pending'];
+        $this->comments[] = ['username' => $username, 'content' =>  $content, 'status' => 'pending', 'createdAt' => (new DateTime())->format('Y-m-d H:i')];
     }
 
     public function approveComment()
@@ -154,16 +154,20 @@ class Article
     {
         return $this->content;
     }
-    public function getAuthor() {
+    public function getAuthor()
+    {
         return $this->author;
     }
     public function getStatus()
     {
         return $this->status;
     }
-    public function getComments()
+    public function getComments($condition = 'all')
     {
-        return $this->comments;
+        if ($condition == 'all') return $this->comments;
+        return array_filter($this->comments, function ($comment) use ($condition) {
+            return $comment['status'] === $condition;
+        });
     }
     public function getCreatedAt()
     {
