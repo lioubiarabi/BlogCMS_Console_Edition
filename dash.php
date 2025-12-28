@@ -15,9 +15,10 @@ class collection
     {
 
         $this->users = [
-            "user1" => new Author(1, "user1", "user", "user", "this author hehe"),
+            "user1" => new Author(1, "user", "user", "user", "this author hehe"),
             "user2" => new Author(2, "user2", "user2@email.com", "password", "this author hehe"),
-            "user3" => new Author(3, "user3", "user3@email.com", "password", "this author hehe")
+            "user3" => new Author(3, "user3", "user3@email.com", "password", "this author hehe"),
+            "user4" => new Editor(4, "user4", "user4@email.com", "password", "this Editor hehe")
         ];
 
         $this->categories = [
@@ -34,7 +35,7 @@ class collection
 
         // temporary
         //$this->current_user = null;
-        $this->current_user = $this->users['user1'];
+        $this->current_user = $this->users['user4'];
     }
 
 
@@ -45,8 +46,8 @@ class collection
                 $this->current_user = $user;
                 return true;
             }
-            return false;
         }
+        return false;
     }
 
     public function isLoggedIn()
@@ -139,7 +140,13 @@ class collection
                     }
                 }
                 break;
-
+            case 'all':
+                foreach ($this->categories as $category) {
+                    foreach ($category->getArticles() as $article) {
+                        $result[] = $article;
+                    }
+                }
+                break;
             default:
                 // to get articles by the username of the author
                 foreach ($this->categories as $category) {
@@ -253,7 +260,6 @@ while (true) {
                         echo "\n1. modify an article\n";
                         echo "2. delete an article\n";
                         echo "3. publish an article\n";
-                        echo "4. show comments\n";
                         echo "0. Go back to menu\n";
                         echo "\n choose a number: ";
 
@@ -303,6 +309,127 @@ while (true) {
 
                                 if (isset($myArti[$index])) {
                                     if ($myArti[$index]->publish()) {
+                                        echo "\narticle is now Public!\n";
+                                        $artiLoop = false;
+                                    } else {
+                                        echo "\narticle is already public.\n";
+                                    }
+                                } else {
+                                    echo "\narticle id not found.\n";
+                                }
+                                break;
+                            default:
+                                echo "please choose a coorect number\n";
+                                break;
+                        }
+                    }
+
+                    break;
+                case 3:
+                    echo "Enter title: ";
+                    $newTitle = trim(fgets(STDIN));
+
+                    echo "Enter content: ";
+                    $newContent = trim(fgets(STDIN));
+
+                    $db->listCategories();
+
+                    echo "\nChoose Category ID: ";
+                    $catId = (int)trim(fgets(STDIN));
+                    if ($db->createArticle($newTitle, $newContent, $catId, $db->getUser())) {
+                        echo "\narticle created successfully!\n";
+                    } else {
+                        echo "\ncategory ID not found and article was not saved.\n";
+                    }
+                    break;
+
+                default:
+                    echo "Please choose a correct number";
+                    break;
+            }
+            break;
+
+        case 'Editor':
+            echo "\n1. manage articles\n";
+            echo "2. create an article\n";
+            echo "0. logout\n";
+            echo "\n choose a number: ";
+
+            switch (trim(fgets(STDIN))) {
+                case 0:
+                    $db->logout();
+                    break;
+                case 1:
+                    echo "\n My Articles: \n\n";
+                    $allArti = $db->getAllArticles('all');
+                    if ($allArti == null) {
+                        echo "\n\nthere's no articles \n\n";
+                        break;
+                    }
+                    printf("%-5s %-15s %-10s %-10s %-20s %-20s %-20s %-10s %-30s\n",  "id", "title", "status", "comments", "publishedAt", "created At", "updated At", "auhtor", "content");
+
+                    echo str_repeat("=", 150) . "\n";
+
+                    foreach ($allArti as $key => $article) {
+                        printf("%-5s %-15s %-10s %-10s %-20s %-20s %-20s %-10s %-30s\n", ($key + 1), $article->getTitle(), $article->getStatus(), count($article->getComments()), $article->getPublishedAt(), $article->getCreatedAt(), $article->getUpdatedAt(),$article->getAuthor(), $article->getContent());
+                    }
+                    echo "\n\n";
+
+                    $artiLoop = true;
+                    while ($artiLoop) {
+                        echo "\n1. modify an article\n";
+                        echo "2. delete an article\n";
+                        echo "3. publish an article\n";
+                        echo "4. manage comments\n";
+                        echo "0. Go back to menu\n";
+                        echo "\n choose a number: ";
+
+                        $number = (int)trim(fgets(STDIN));
+                        switch ($number) {
+                            case 0:
+                                $artiLoop = false;
+                                break;
+                            case 1:
+                                echo "\nChoose an Article id: ";
+                                $idInput = (int)trim(fgets(STDIN));
+                                $index = $idInput - 1;
+
+                                if (isset($allArti[$index])) {
+                                    echo "Enter new content: ";
+                                    $newContent = trim(fgets(STDIN));
+                                    $allArti[$index]->updateContent($newContent);
+                                    echo "\narticle updated successfully.\n";
+                                    $artiLoop = false;
+                                } else {
+                                    echo "\narticle id not found.\n";
+                                }
+                                break;
+
+                            case 2:
+                                echo "\nwhich article to delete: ";
+                                $numInput = (int)trim(fgets(STDIN));
+                                $index = $numInput - 1;
+
+                                if (isset($allArti[$index])) {
+                                    if ($db->deleteArticle($allArti[$index]->getId())) {
+                                        echo "\narticle deleted.\n\n";
+                                        $artiLoop = false;
+                                    } else {
+                                        echo "\nnot supposed to happen\n";
+                                    }
+                                } else {
+                                    echo "\narticle number not found.\n";
+                                }
+
+                                break;
+
+                            case 3:
+                                echo "\nChoose an Article id: ";
+                                $idInput = (int)trim(fgets(STDIN));
+                                $index = $idInput - 1;
+
+                                if (isset($allArti[$index])) {
+                                    if ($allArti[$index]->publish()) {
                                         echo "\narticle is now Public!\n";
                                         $artiLoop = false;
                                     } else {
@@ -378,32 +505,11 @@ while (true) {
                     }
 
                     break;
-                case 3:
-                    echo "Enter title: ";
-                    $newTitle = trim(fgets(STDIN));
-
-                    echo "Enter content: ";
-                    $newContent = trim(fgets(STDIN));
-
-                    $db->listCategories();
-
-                    echo "\nChoose Category ID: ";
-                    $catId = (int)trim(fgets(STDIN));
-                    if ($db->createArticle($newTitle, $newContent, $catId, $db->getUser())) {
-                        echo "\narticle created successfully!\n";
-                    } else {
-                        echo "\ncategory ID not found and article was not saved.\n";
-                    }
-                    break;
 
                 default:
                     echo "Please choose a correct number";
                     break;
             }
-            break;
-
-        case 'Editor':
-            # code...
             break;
 
         case 'Admin':
@@ -481,12 +587,12 @@ while (true) {
                     }
                     break;
                 case 2:
-                    echo "Entre your email: ";
-                    $email = trim(fgets(STDIN));
+                    echo "Entre your username: ";
+                    $username = trim(fgets(STDIN));
                     echo "Entre your password: ";
                     $password = trim(fgets(STDIN));
 
-                    echo ($db->login($email, $password)) ? "Welcome back!\n" : "Wrong email/password!\n";
+                    echo ($db->login($username, $password)) ? "Welcome back!\n" : "Wrong username/password!\n";
                     break;
 
                 default:

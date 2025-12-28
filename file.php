@@ -10,9 +10,9 @@ class User
     protected ?DateTime $lastLogin;
 
 
-    public function auth($loginEmail, $loginPass)
+    public function auth($loginUsername, $loginPass)
     {
-        if ($this->email == $loginEmail && $this->password == $loginPass) return true;
+        if ($this->username == $loginUsername && $this->password == $loginPass) return true;
         else return false;
     }
 
