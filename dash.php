@@ -7,6 +7,9 @@ class collection
     private ?User $current_user;
     private array $users = [];
     private array $categories = [];
+    private int $newArticle = 10;
+    private int $newCategory = 10;
+    private int $newUser = 10;
 
     public function __construct()
     {
@@ -18,10 +21,10 @@ class collection
         ];
 
         $this->categories = [
-            new Category(1, "Techno", "this is all about techno", "Techno"),
-            new Category(2, "coding", "this is all about techno/coding", "Techno/coding"),
-            new Category(3, "php", "this is all about techno/coding/php", "Techno/coding/php"),
-            new Category(4, "Learn", "this is all about Learn", "Learn"),
+            new Category(1, "Techno", "this is all about techno"),
+            new Category(2, "coding", "this is all about techno/coding", 1),
+            new Category(3, "php", "this is all about techno/coding/php", 2),
+            new Category(4, "Learn", "this is all about Learn"),
 
         ];
 
@@ -74,6 +77,49 @@ class collection
         return $this->categories;
     }
 
+    public function listCategories()
+    {
+        echo "\nselect a Category: \n";
+        $roots = [];
+        $children = [];
+
+        foreach ($this->categories as $cat) {
+            if ($cat->getParentId() == null) {
+                $roots[] = $cat;
+            } else {
+                $children[$cat->getParentId()][] = $cat;
+            }
+        }
+
+        foreach ($roots as $root) {
+            printf("ID: %-3d | %s\n", $root->getId(), $root->getName());
+            if (isset($children[$root->getId()])) {
+                foreach ($children[$root->getId()] as $child) {
+                    printf("       |__ ID: %-3d | %s\n", $child->getId(), $child->getName());
+                }
+            }
+        }
+        echo "-------------------------\n";
+    }
+
+    public function createArticle($title, $content, $catId, $authorName)
+    {
+        $targetCategory = null;
+        foreach ($this->categories as $cat) {
+            if ($cat->getId() == $catId) {
+                $targetCategory = $cat;
+                break;
+            }
+        }
+
+        if ($targetCategory) {
+            $targetCategory->addArticle(new Article($this->newArticle++, $title, $content, $authorName));
+            return true;
+        }
+
+        return false;
+    }
+
     public function deleteArticle($id)
     {
         foreach ($this->categories as $category) {
@@ -118,6 +164,7 @@ while (true) {
         case 'Author':
             echo "\n1. show all article\n";
             echo "2. show my articles\n";
+            echo "3. create an article\n";
             echo "0. logout\n";
             echo "\n choose a number: ";
 
@@ -330,6 +377,23 @@ while (true) {
                         }
                     }
 
+                    break;
+                case 3:
+                    echo "Enter title: ";
+                    $newTitle = trim(fgets(STDIN));
+
+                    echo "Enter content: ";
+                    $newContent = trim(fgets(STDIN));
+
+                    $db->listCategories();
+
+                    echo "\nChoose Category ID: ";
+                    $catId = (int)trim(fgets(STDIN));
+                    if ($db->createArticle($newTitle, $newContent, $catId, $db->getUser())) {
+                        echo "\narticle created successfully!\n";
+                    } else {
+                        echo "\ncategory ID not found and article was not saved.\n";
+                    }
                     break;
 
                 default:

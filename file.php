@@ -196,16 +196,16 @@ class Category
     private int $id;
     private string $name;
     private string $description;
-    private string $path;
+    private ?int $parentId;
     private array $articles = [];
     private DateTime $createdAt;
 
-    public function __construct($id, $name, $description, $path)
+    public function __construct($id, $name, $description, $parentId = null)
     {
         $this->id = $id;
         $this->name = $name;
         $this->description = $description;
-        $this->path = $path;
+        $this->parentId = $parentId;
         $this->createdAt = new DateTime();
     }
 
@@ -216,19 +216,31 @@ class Category
     }
 
     public function removeArticle($articleId)
-{
-    foreach ($this->articles as $key => $article) {
-        if ($article->getId() == $articleId) {
-            unset($this->articles[$key]);
-            $this->articles = array_values($this->articles); 
-            return true;
+    {
+        foreach ($this->articles as $key => $article) {
+            if ($article->getId() == $articleId) {
+                unset($this->articles[$key]);
+                $this->articles = array_values($this->articles);
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
 
     public function getArticles()
     {
         return $this->articles;
+    }
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function getName()
+    {
+        return $this->name;
+    }
+    public function getParentId()
+    {
+        return $this->parentId;
     }
 }
