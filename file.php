@@ -129,14 +129,22 @@ class Article
         $this->comments[] = ['username' => $username, 'content' =>  $content, 'status' => 'pending', 'createdAt' => (new DateTime())->format('Y-m-d H:i')];
     }
 
-    public function approveComment()
+    public function approveComment($index)
     {
-        $this->comments['status'] = 'approved';
+        if (isset($this->comments[$index])) {
+            $this->comments[$index]['status'] = 'approved';
+            return true;
+        }
+        return false;
     }
 
-    public function refuseComment()
+    public function refuseComment($index)
     {
-        $this->comments['status'] = 'refused';
+        if (isset($this->comments[$index])) {
+            $this->comments[$index]['status'] = 'refused';
+            return true;
+        }
+        return false;
     }
 
     public function getId()
