@@ -232,6 +232,20 @@ while (true) {
                                 break;
 
                             case 2:
+                                echo "\nwhich article to delete: ";
+                                $numInput = (int)trim(fgets(STDIN));
+                                $index = $numInput - 1;
+
+                                if (isset($myArti[$index])) {
+                                    if ($db->deleteArticle($myArti[$index]->getId())) {
+                                        echo "\narticle deleted.\n\n";
+                                        $artiLoop = false;
+                                    } else {
+                                        echo "\nnot supposed to happen\n";
+                                    }
+                                } else {
+                                    echo "\narticle number not found.\n";
+                                }
 
                                 break;
 
