@@ -217,12 +217,23 @@ class collection
         return false;
     }
 
-    public function getUserIds() {
+    public function getUserIds()
+    {
         return $this->newUser++;
     }
 
-    public function addUser(User $user) {
+    public function addUser(User $user)
+    {
         $this->users[$user->username] = $user;
+    }
+
+    public function removeUser($username)
+    {
+        if (isset($this->users[$username])) {
+            unset($this->users[$username]);
+            return true;
+        }
+        return false;
     }
 }
 
@@ -733,6 +744,19 @@ while (true) {
                                     break;
 
                                 case 3:
+
+                                    echo "\nenter username to delete: ";
+                                    $targetUser = trim(fgets(STDIN));
+
+                                    if ($targetUser == $db->getUser()) {
+                                        echo "you cannot delete yourself \n";
+                                    } else {
+                                        if ($db->removeUser($targetUser)) {
+                                            echo "\nuser deleted.\n";
+                                        } else {
+                                            echo "\nuser not found.\n";
+                                        }
+                                    }
                                     break;
 
                                 default:
