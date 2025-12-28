@@ -112,6 +112,18 @@ class collection
         echo "-------------------------\n";
     }
 
+    public function removeCategory($categoryId)
+    {
+        foreach ($this->categories as $key => $category) {
+            if ($category->getId() == $categoryId) {
+                unset($this->categories[$key]);
+                $this->categories = array_values($this->categories);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function createArticle($title, $content, $catId, $authorName)
     {
         $targetCategory = null;
@@ -361,6 +373,7 @@ while (true) {
         case 'Editor':
             echo "\n1. manage articles\n";
             echo "2. create an article\n";
+            echo "3. manage categories\n";
             echo "0. logout\n";
             echo "\n choose a number: ";
 
@@ -537,6 +550,35 @@ while (true) {
                         echo "\narticle created successfully!\n";
                     } else {
                         echo "\ncategory ID not found and article was not saved.\n";
+                    }
+                    break;
+
+                case 3:
+                    $loop = true;
+                    while ($loop) {
+                        $db->listCategories();
+                        echo "\n1. creat new main category\n";
+                        echo "2.creat new sub-category\n";
+                        echo "3.update a category\n";
+                        echo "4.delete a category\n";
+                        echo "0. Go back to menu\n";
+                        echo "choose a number:";
+
+                        switch (trim(fgets(STDIN))) {
+                            case 4:
+                                echo "choose a category Id: ";
+                                $choosednId = (int)trim(fgets(STDIN));
+
+                                if($db->removeCategory($choosednId)) echo "catgeory deleted successfuly!";
+                                else echo "category wasn't found!\n";
+                                
+                                break;
+                            
+                            default:
+                                echo "Please choose a correct number!";
+                                break;
+                        }
+
                     }
                     break;
                 default:
