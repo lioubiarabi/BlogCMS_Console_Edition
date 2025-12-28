@@ -3,10 +3,9 @@
 class User
 {
     protected int $id;
-    protected string $username;
+    public string $username;
     protected string $email;
     protected string $password;
-    protected string $role;
     protected DateTime $createdAt;
     protected ?DateTime $lastLogin;
 
@@ -21,6 +20,13 @@ class User
     {
         $this->lastLogin = new DateTime();
     }
+
+    public function getRole(){
+        if($this instanceof Admin) return "admin";
+        elseif($this instanceof Editor) return "Editor";
+        elseif($this instanceof Author) return "Author";
+        else null;
+    } 
 }
 
 class Author extends User
@@ -161,6 +167,10 @@ class Category
     public function addArticle(Article $article)
     {
         $this->articles[] = $article;
+    }
+
+    public function getArticles() {
+        return $this->articles;
     }
 }
 
