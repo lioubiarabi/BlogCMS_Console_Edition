@@ -15,10 +15,11 @@ class collection
     {
 
         $this->users = [
-            "user1" => new Author(1, "user", "user", "user", "this author hehe"),
+            "author" => new Author(1, "author", "author", "author", "this author hehe"),
             "user2" => new Author(2, "user2", "user2@email.com", "password", "this author hehe"),
             "user3" => new Author(3, "user3", "user3@email.com", "password", "this author hehe"),
-            "user4" => new Editor(4, "user4", "user4@email.com", "password", "this Editor hehe")
+            "editor" => new Editor(4, "editor", "editor", "editor", "this Editor hehe"),
+            "admin" => new Admin(5, "admin", "admin", "admin", "this Editor hehe"),
         ];
 
         $this->categories = [
@@ -35,7 +36,7 @@ class collection
 
         // temporary
         //$this->current_user = null;
-        $this->current_user = $this->users['user4'];
+        $this->current_user = $this->users['admin'];
     }
 
 
@@ -391,9 +392,11 @@ while (true) {
             break;
 
         case 'Editor':
+        case 'Admin':
             echo "\n1. manage articles\n";
             echo "2. create an article\n";
             echo "3. manage categories\n";
+            if ($db->getRole() == "Admin") echo "4. manage users\n";
             echo "0. logout\n";
             echo "\n choose a number: ";
 
@@ -594,7 +597,7 @@ while (true) {
                                 echo "Enter new category description: ";
                                 $description = trim(fgets(STDIN));
 
-                                $db->createCategory($name,$description, null);
+                                $db->createCategory($name, $description, null);
                                 echo "\n main category created.\n";
                                 break;
 
@@ -634,14 +637,16 @@ while (true) {
                         }
                     }
                     break;
+                case 4:
+                    if ($db->getRole() == "Admin") {
+                    } else {
+                        echo "You don't have the access to manage users\n\n";
+                    }
+                    break;
                 default:
                     echo "Please choose a correct number";
                     break;
             }
-            break;
-
-        case 'Admin':
-            # code...
             break;
 
         default:

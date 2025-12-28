@@ -23,7 +23,7 @@ class User
 
     public function getRole()
     {
-        if ($this instanceof Admin) return "admin";
+        if ($this instanceof Admin) return "Admin";
         elseif ($this instanceof Editor) return "Editor";
         elseif ($this instanceof Author) return "Author";
         else null;
