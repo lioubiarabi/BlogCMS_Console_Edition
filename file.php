@@ -210,6 +210,18 @@ class Category
         $this->articles[] = $article;
     }
 
+    public function removeArticle($articleId)
+{
+    foreach ($this->articles as $key => $article) {
+        if ($article->getId() == $articleId) {
+            unset($this->articles[$key]);
+            $this->articles = array_values($this->articles); 
+            return true;
+        }
+    }
+    return false;
+}
+
     public function getArticles()
     {
         return $this->articles;
