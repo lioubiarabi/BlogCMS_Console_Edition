@@ -112,7 +112,17 @@ class collection
         echo "-------------------------\n";
     }
 
-    public function updateCategory($categoryId, $name) {
+    public function createCategory($name, $description, $parentId = null)
+    {
+        $newId = $this->newCategory++;
+
+        $newCat = new Category($newId, $name, $description, $parentId);
+        $this->categories[] = $newCat;
+        return true;
+    }
+
+    public function updateCategory($categoryId, $name)
+    {
         foreach ($this->categories as $key => $category) {
             if ($category->getId() == $categoryId) {
                 $this->categories[$key]->update($name);
@@ -568,9 +578,9 @@ while (true) {
                     while ($loop) {
                         $db->listCategories();
                         echo "\n1. creat new main category\n";
-                        echo "2.creat new sub-category\n";
-                        echo "3.update a category\n";
-                        echo "4.delete a category\n";
+                        echo "2. creat new sub-category\n";
+                        echo "3. update a category\n";
+                        echo "4. delete a category\n";
                         echo "0. Go back to menu\n";
                         echo "choose a number:";
 
@@ -578,6 +588,28 @@ while (true) {
                             case 0:
                                 $loop = false;
                                 break;
+                            case 1:
+                                echo "Enter new category name: ";
+                                $name = trim(fgets(STDIN));
+                                echo "Enter new category description: ";
+                                $description = trim(fgets(STDIN));
+
+                                $db->createCategory($name,$description, null);
+                                echo "\n main category created.\n";
+                                break;
+
+                            case 2:
+                                echo "enter parent category id: ";
+                                $pid = (int)trim(fgets(STDIN));
+                                echo "Enter new sub-category name: ";
+                                $name = trim(fgets(STDIN));
+                                echo "Enter new category description: ";
+                                $description = trim(fgets(STDIN));
+
+                                $db->createCategory($name, $description, $pid);
+                                echo "\nsub-category created.\n";
+                                break;
+
                             case 3:
                                 echo "choose a category Id: ";
                                 $choosednId = (int)trim(fgets(STDIN));
@@ -585,22 +617,21 @@ while (true) {
                                 echo "choose new category name: ";
                                 $choosenName = trim(fgets(STDIN));
 
-                                if($db->updateCategory($choosednId, $choosenName)) echo "catgeory updated successfuly!";
+                                if ($db->updateCategory($choosednId, $choosenName)) echo "catgeory updated successfuly!";
                                 else echo "category wasn't found!\n";
                                 break;
                             case 4:
                                 echo "choose a category Id: ";
                                 $choosednId = (int)trim(fgets(STDIN));
 
-                                if($db->removeCategory($choosednId)) echo "catgeory deleted successfuly!";
+                                if ($db->removeCategory($choosednId)) echo "catgeory deleted successfuly!";
                                 else echo "category wasn't found!\n";
                                 break;
-                            
+
                             default:
                                 echo "Please choose a correct number!";
                                 break;
                         }
-
                     }
                     break;
                 default:
