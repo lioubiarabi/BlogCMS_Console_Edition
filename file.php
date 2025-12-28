@@ -157,6 +157,9 @@ class Article
     {
         return $this->content;
     }
+    public function getAuthor() {
+        return $this->author;
+    }
     public function getStatus()
     {
         return $this->status;

@@ -49,7 +49,8 @@ class collection
         return false;
     }
 
-    public function logout() {
+    public function logout()
+    {
         $this->current_user = null;
     }
 
@@ -83,7 +84,12 @@ class collection
                 break;
 
             default:
-                # code...
+                // to get articles by the username of the author
+                foreach ($this->categories as $category) {
+                    foreach ($category->getArticles() as $article) {
+                        if ($article->getAuthor() == $condition) $result[] = $article;
+                    }
+                }
                 break;
         }
 
@@ -100,7 +106,7 @@ while (true) {
     switch ($db->getRole()) {
         case 'Author':
             echo "\n1. show all article\n";
-            echo "2. login to your account\n";
+            echo "2. show my articles\n";
             echo "0. logout\n";
             echo "\n choose a number: ";
 
@@ -119,12 +125,15 @@ while (true) {
                     }
                     break;
                 case 2:
-                    echo "Entre your email: ";
-                    $email = trim(fgets(STDIN));
-                    echo "Entre your password: ";
-                    $password = trim(fgets(STDIN));
-
-                    echo ($db->login($email, $password)) ? "Welcome back!\n" : "Wrong email/password!\n";
+                    echo "\n My Articles: \n";
+                    $myArti = $db->getAllArticles($db->getUser());
+                    if ($myArti == null) {
+                        echo "\n\nthere's no articles \n\n";
+                        break;
+                    }
+                    foreach ($myArti as $article) {
+                        print_r($article);
+                    }
                     break;
 
                 default:
