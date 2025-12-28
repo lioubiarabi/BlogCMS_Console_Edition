@@ -49,6 +49,10 @@ class collection
         return false;
     }
 
+    public function logout() {
+        $this->current_user = null;
+    }
+
     public function getUser()
     {
         if ($this->current_user != null) return $this->current_user->username;
@@ -73,7 +77,7 @@ class collection
             case 'published':
                 foreach ($this->categories as $category) {
                     foreach ($category->getArticles() as $article) {
-                        if($article->getStatus() == 'published') $result[] = $article;
+                        if ($article->getStatus() == 'published') $result[] = $article;
                     }
                 }
                 break;
@@ -83,7 +87,7 @@ class collection
                 break;
         }
 
-        if(count($result) == 0) return null;
+        if (count($result) == 0) return null;
         else return $result;
     }
 }
@@ -94,8 +98,39 @@ while (true) {
 
     echo "Hello, Dear " . $db->getUser() . " || " . $db->getRole();
     switch ($db->getRole()) {
-        case 'Auhtor':
-            # code...
+        case 'Author':
+            echo "\n1. show all article\n";
+            echo "2. login to your account\n";
+            echo "0. logout\n";
+            echo "\n choose a number: ";
+
+            switch (trim(fgets(STDIN))) {
+                case 0:
+                    $db->logout();
+                    break;
+                case 1:
+                    $pubArticles = $db->getAllArticles('published');
+                    if ($pubArticles == null) {
+                        echo "\n\nthere's no articles \n\n";
+                        break;
+                    }
+                    foreach ($pubArticles as $article) {
+                        print_r($article);
+                    }
+                    break;
+                case 2:
+                    echo "Entre your email: ";
+                    $email = trim(fgets(STDIN));
+                    echo "Entre your password: ";
+                    $password = trim(fgets(STDIN));
+
+                    echo ($db->login($email, $password)) ? "Welcome back!\n" : "Wrong email/password!\n";
+                    break;
+
+                default:
+                    echo "Please choose a correct number";
+                    break;
+            }
             break;
 
         case 'Editor':
@@ -118,11 +153,11 @@ while (true) {
                     break;
                 case 1:
                     $pubArticles = $db->getAllArticles('published');
-                    if($pubArticles == null) {
+                    if ($pubArticles == null) {
                         echo "\n\nthere's no articles \n\n";
                         break;
                     }
-                    foreach($pubArticles as $article) {
+                    foreach ($pubArticles as $article) {
                         print_r($article);
                     }
                     break;
