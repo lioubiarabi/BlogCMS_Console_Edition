@@ -81,7 +81,7 @@ class collection
             case 'published':
                 foreach ($this->categories as $category) {
                     foreach ($category->getArticles() as $article) {
-                        if ($article->getStatus() == 'published') $result[] = $article;
+                        if ($article->getStatus() == 'public') $result[] = $article;
                     }
                 }
                 break;
@@ -167,6 +167,27 @@ while (true) {
                                     $myArti[$index]->updateContent($newContent);
                                     echo "\narticle updated successfully.\n";
                                     $artiLoop = false;
+                                } else {
+                                    echo "\narticle id not found.\n";
+                                }
+                                break;
+
+                            case 2:
+
+                                break;
+
+                            case 3:
+                                echo "\nChoose an Article id: ";
+                                $idInput = (int)trim(fgets(STDIN));
+                                $index = $idInput - 1;
+
+                                if (isset($myArti[$index])) {
+                                    if ($myArti[$index]->publish()) {
+                                        echo "\narticle is now Public!\n";
+                                        $artiLoop = false;
+                                    } else {
+                                        echo "\narticle is already public.\n";
+                                    }
                                 } else {
                                     echo "\narticle id not found.\n";
                                 }
