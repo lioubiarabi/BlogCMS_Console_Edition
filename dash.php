@@ -10,7 +10,7 @@ class collection
 
     public function __construct()
     {
-        
+
         $this->users = [
             "user1" => new Author(1, "user1", "user", "user", "this author hehe"),
             "user2" => new Author(2, "user2", "user2@email.com", "password", "this author hehe"),
@@ -22,13 +22,13 @@ class collection
             new Category(2, "coding", "this is all about techno/coding", "Techno/coding"),
             new Category(3, "php", "this is all about techno/coding/php", "Techno/coding/php"),
             new Category(4, "Learn", "this is all about Learn", "Learn"),
-            
+
         ];
-        
+
         $this->categories[0]->addArticle(new Article(1, 'title1', 'content1', 'user1'));
         $this->categories[2]->addArticle(new Article(2, 'title2', 'content2', 'user2'));
         $this->categories[3]->addArticle(new Article(3, 'title3', 'content3', 'user3'));
-        
+
         // temporary
         //$this->current_user = null;
         $this->current_user = $this->users['user1'];
@@ -99,7 +99,6 @@ class collection
         if (count($result) == 0) return null;
         else return $result;
     }
-
 }
 
 $db = new collection();
@@ -135,12 +134,25 @@ while (true) {
                         echo "\n\nthere's no articles \n\n";
                         break;
                     }
-                    printf("%-5s %-15s %-10status\n", "id", "title", "status");
-                    echo "============================================================\n";
-                    foreach ($myArti as $article) {
-                        printf("%-5d %-15s %-10status", $article->getId(), $article->getTitle(), $article->getStatus());
+                    printf("%-5s %-15s %-10s %-10s %-20s %-20s %-20s %-30s\n",  "id", "title", "status", "comments", "publishedAt", "created At", "updated At", "content");
+
+                    echo str_repeat("=", 150) . "\n";
+
+                    foreach ($myArti as $key => $article) {
+                        printf("%-5s %-15s %-10s %-10s %-20s %-20s %-20s %-30s\n", ($key + 1), $article->getTitle(), $article->getStatus(), count($article->getComments()), $article->getPublishedAt(), $article->getCreatedAt(), $article->getUpdatedAt(), $article->getContent());
                     }
                     echo "\n\n";
+
+                    while (true) {
+                        echo "\n1. show all article\n";
+                        echo "2. show my articles\n";
+                        echo "0. logout\n";
+                        echo "\n choose a number: ";
+
+                        switch (trim(fgets(STDIN))) {
+                        }
+                    }
+
                     break;
 
                 default:

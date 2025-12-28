@@ -127,11 +127,6 @@ class Article
         $this->content = $content;
     }
 
-    public function getComments()
-    {
-        return $this->comments;
-    }
-
     public function addComment($username, $content)
     {
         $this->comments = ['username' => $username, 'content' =>  $content, 'status' => 'pending'];
@@ -166,17 +161,24 @@ class Article
     {
         return $this->status;
     }
+    public function getComments()
+    {
+        return $this->comments;
+    }
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return  $this->createdAt->format('Y-m-d H:i');
     }
     public function getPublishedAt()
     {
-        return $this->publishedAt;
+        if ($this->publishedAt === null) {
+            return "Not Published";
+        }
+        return $this->publishedAt->format('Y-m-d H:i');
     }
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updatedAt->format('Y-m-d H:i');
     }
 }
 
