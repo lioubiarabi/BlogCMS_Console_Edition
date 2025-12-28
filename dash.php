@@ -202,6 +202,15 @@ class collection
         if (count($result) == 0) return null;
         else return $result;
     }
+
+    public function updateUser($username, $newEmail)
+    {
+        if (isset($this->users[$username])) {
+            $this->users[$username]->setEmail($newEmail);
+            return true;
+        }
+        return false;
+    }
 }
 
 $db = new collection();
@@ -639,6 +648,44 @@ while (true) {
                     break;
                 case 4:
                     if ($db->getRole() == "Admin") {
+                        $loop = true;
+                        while ($loop) {
+                            
+                            echo "\n1. add new user\n";
+                            echo "2. update a user\n";
+                            echo "3. delete a user\n";
+                            echo "0. Go back to menu\n";
+                            echo "choose a number:";
+
+                            switch (trim(fgets(STDIN))) {
+                                case 0:
+                                    $loop = false;
+                                    break;
+                                case 1:
+                                    break;
+
+                                case 2:
+                                    echo "Enter the username to update: ";
+                                    $targetUser = trim(fgets(STDIN));
+
+                                    echo "Enter new email: ";
+                                    $newEmail = trim(fgets(STDIN));
+
+                                    if ($db->updateUser($targetUser, $newEmail)) {
+                                        echo "\nuser updated.\n";
+                                    } else {
+                                        echo "\nuser not found.\n";
+                                    }
+                                    break;
+
+                                case 3:
+                                    break;
+
+                                default:
+                                    echo "Please choose a correct number!";
+                                    break;
+                            }
+                        }
                     } else {
                         echo "You don't have the access to manage users\n\n";
                     }

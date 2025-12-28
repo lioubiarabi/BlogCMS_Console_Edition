@@ -28,6 +28,9 @@ class User
         elseif ($this instanceof Author) return "Author";
         else null;
     }
+
+    public function getEmail() { return $this->email; }
+    public function setEmail($email) { $this->email = $email; }
 }
 
 class Author extends User
