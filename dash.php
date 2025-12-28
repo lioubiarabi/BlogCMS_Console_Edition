@@ -74,6 +74,14 @@ class collection
         return $this->categories;
     }
 
+    public function deleteArticle($id)
+    {
+        foreach ($this->categories as $category) {
+            if ($category->removeArticle($id)) return true;
+        }
+        return false;
+    }
+
     public function getAllArticles($condition)
     {
         $result = [];
