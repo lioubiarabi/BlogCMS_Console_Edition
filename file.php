@@ -21,12 +21,13 @@ class User
         $this->lastLogin = new DateTime();
     }
 
-    public function getRole(){
-        if($this instanceof Admin) return "admin";
-        elseif($this instanceof Editor) return "Editor";
-        elseif($this instanceof Author) return "Author";
+    public function getRole()
+    {
+        if ($this instanceof Admin) return "admin";
+        elseif ($this instanceof Editor) return "Editor";
+        elseif ($this instanceof Author) return "Author";
         else null;
-    } 
+    }
 }
 
 class Author extends User
@@ -143,6 +144,35 @@ class Article
     {
         $this->comments['status'] = 'refused';
     }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    public function getContent()
+    {
+        return $this->content;
+    }
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+    public function getPublishedAt()
+    {
+        return $this->publishedAt;
+    }
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
 }
 
 class Category
@@ -169,8 +199,8 @@ class Category
         $this->articles[] = $article;
     }
 
-    public function getArticles() {
+    public function getArticles()
+    {
         return $this->articles;
     }
 }
-
