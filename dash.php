@@ -67,6 +67,15 @@ class collection
         return "Anonymous";
     }
 
+    public function searchAuthor($username)
+    {
+        foreach ($this->users as $user) {
+            if ($user->getRole() == "Author")
+                if ($user->username == $username) return true;
+        }
+        return false;
+    }
+
     public function getRole()
     {
         if ($this->current_user != null) return $this->current_user->getRole();
@@ -371,7 +380,7 @@ while (true) {
                     echo str_repeat("=", 150) . "\n";
 
                     foreach ($allArti as $key => $article) {
-                        printf("%-5s %-15s %-10s %-10s %-20s %-20s %-20s %-10s %-30s\n", ($key + 1), $article->getTitle(), $article->getStatus(), count($article->getComments()), $article->getPublishedAt(), $article->getCreatedAt(), $article->getUpdatedAt(),$article->getAuthor(), $article->getContent());
+                        printf("%-5s %-15s %-10s %-10s %-20s %-20s %-20s %-10s %-30s\n", ($key + 1), $article->getTitle(), $article->getStatus(), count($article->getComments()), $article->getPublishedAt(), $article->getCreatedAt(), $article->getUpdatedAt(), $article->getAuthor(), $article->getContent());
                     }
                     echo "\n\n";
 
@@ -505,7 +514,31 @@ while (true) {
                     }
 
                     break;
+                case 2:
+                    echo "Enter title: ";
+                    $newTitle = trim(fgets(STDIN));
 
+                    echo "Enter content: ";
+                    $newContent = trim(fgets(STDIN));
+
+                    echo "Enter the Author username: ";
+                    $authorName = trim(fgets(STDIN));
+
+                    if (!$db->searchAuthor($authorName)) {
+                        echo "there's no athor with this username\n\n";
+                        break;
+                    }
+
+                    $db->listCategories();
+
+                    echo "\nChoose Category ID: ";
+                    $catId = (int)trim(fgets(STDIN));
+                    if ($db->createArticle($newTitle, $newContent, $catId, $authorName)) {
+                        echo "\narticle created successfully!\n";
+                    } else {
+                        echo "\ncategory ID not found and article was not saved.\n";
+                    }
+                    break;
                 default:
                     echo "Please choose a correct number";
                     break;
