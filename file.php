@@ -109,6 +109,7 @@ class Article
     public function publish()
     {
         if ($this->status == 'public') return false;
+        $this->publishedAt = new DateTime();
         $this->status = 'public';
         return true;
     }
@@ -122,6 +123,7 @@ class Article
 
     public function updateContent($content)
     {
+        $this->updatedAt = new DateTime();
         $this->content = $content;
     }
 
