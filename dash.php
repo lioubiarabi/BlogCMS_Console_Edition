@@ -203,6 +203,11 @@ class collection
         else return $result;
     }
 
+    public function getAllUsers()
+    {
+        return $this->users;
+    }
+
     public function updateUser($username, $newEmail)
     {
         if (isset($this->users[$username])) {
@@ -650,8 +655,14 @@ while (true) {
                     if ($db->getRole() == "Admin") {
                         $loop = true;
                         while ($loop) {
-                            
-                            echo "\n1. add new user\n";
+
+                            printf("\n%-10s %-25s %-10s\n", "username", "email", "created At");
+                            echo str_repeat('=', 80);
+                            foreach ($db->getAllUsers() as $user) {
+                                printf("\n%-10s %-25s %-10s", $user->username, $user->getEmail(), $user->getCreatedAt());
+                            }
+
+                            echo "\n\n1. add new user\n";
                             echo "2. update a user\n";
                             echo "3. delete a user\n";
                             echo "0. Go back to menu\n";

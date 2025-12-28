@@ -30,6 +30,7 @@ class User
     }
 
     public function getEmail() { return $this->email; }
+    public function getCreatedAt() {return $this->createdAt->format("Y-m-d H:i");}
     public function setEmail($email) { $this->email = $email; }
 }
 
