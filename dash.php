@@ -33,10 +33,8 @@ class collection
         $this->categories[0]->addArticle(new Article(1, 'title1', 'content1', 'user1'));
         $this->categories[2]->addArticle(new Article(2, 'title2', 'content2', 'user2'));
         $this->categories[3]->addArticle(new Article(3, 'title3', 'content3', 'user3'));
-
-        // temporary
-        //$this->current_user = null;
-        $this->current_user = $this->users['admin'];
+        
+        $this->current_user = null;
     }
 
 
