@@ -60,6 +60,32 @@ class collection
         if ($this->current_user != null) return $this->current_user->getRole();
         return "visitor";
     }
+
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    public function getAllArticles($condition)
+    {
+        $result = [];
+        switch ($condition) {
+            case 'published':
+                foreach ($this->categories as $category) {
+                    foreach ($category->getArticles() as $article) {
+                        if($article->getStatus() == 'published') $result[] = $article;
+                    }
+                }
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
+        if(count($result) == 0) return null;
+        else return $result;
+    }
 }
 
 $db = new collection();
@@ -68,7 +94,15 @@ while (true) {
 
     echo "Hello, Dear " . $db->getUser() . " || " . $db->getRole();
     switch ($db->getRole()) {
-        case 'value':
+        case 'Auhtor':
+            # code...
+            break;
+
+        case 'Editor':
+            # code...
+            break;
+
+        case 'Admin':
             # code...
             break;
 
@@ -83,7 +117,14 @@ while (true) {
                     exit;
                     break;
                 case 1:
-
+                    $pubArticles = $db->getAllArticles('published');
+                    if($pubArticles == null) {
+                        echo "\n\nthere's no articles \n\n";
+                        break;
+                    }
+                    foreach($pubArticles as $article) {
+                        print_r($article);
+                    }
                     break;
                 case 2:
                     echo "Entre your email: ";
