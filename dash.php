@@ -141,8 +141,7 @@ while (true) {
                     echo "\n\n";
                     $loop = true;
                     while ($loop) {
-                        echo "\nActions:\n";
-                        echo "1. read comments and write one\n";
+                        echo "\n1. read comments and write one\n";
                         echo "0. Go back to menu\n";
                         echo "\nChoose a number: ";
 
@@ -207,6 +206,7 @@ while (true) {
                         echo "\n1. modify an article\n";
                         echo "2. delete an article\n";
                         echo "3. publish an article\n";
+                        echo "4. show comments\n";
                         echo "0. Go back to menu\n";
                         echo "\n choose a number: ";
 
@@ -265,6 +265,10 @@ while (true) {
                                     echo "\narticle id not found.\n";
                                 }
                                 break;
+
+                            case 4:
+
+                                break;
                             default:
                                 echo "please choose a coorect number\n";
                                 break;
@@ -298,13 +302,63 @@ while (true) {
                     exit;
                     break;
                 case 1:
-                    $pubArticles = $db->getAllArticles('published');
+                    $pubArticles = $db->getAllArticles('public');
                     if ($pubArticles == null) {
                         echo "\n\nthere's no articles \n\n";
                         break;
                     }
-                    foreach ($pubArticles as $article) {
-                        print_r($article);
+                    printf("%-5s %-15s %-10s %-20s %-30s\n", "id", "title", "comments", "publishedAt", "content");
+
+                    echo str_repeat("=", 80) . "\n";
+
+                    foreach ($pubArticles as $key => $article) {
+                        printf("%-5s %-15s %-10s %-20s %-30s\n", ($key + 1), $article->getTitle(), count($article->getComments()), $article->getPublishedAt(), $article->getContent());
+                    }
+                    echo "\n\n";
+                    $loop = true;
+                    while ($loop) {
+                        echo "\n1. read comments and write one\n";
+                        echo "0. Go back to menu\n";
+                        echo "\nChoose a number: ";
+
+                        $choice = trim(fgets(STDIN));
+
+                        switch ($choice) {
+                            case 0:
+                                $loop = false;
+                                break;
+
+                            case 1:
+                                echo "\nwhich article number: ";
+                                $articleIndex = (int)trim(fgets(STDIN));
+                                $index = $articleIndex - 1;
+
+                                if (isset($pubArticles[$index])) {
+                                    printf("\n%-15s %-30s %-20s\n", "Username", "Comment", "Created At");
+
+                                    echo str_repeat("=", 70) . "\n";
+
+                                    $comments = $pubArticles[$index]->getComments('approved');
+                                    if (count($comments) == 0) echo "no comments yet\n";
+                                    foreach ($comments as $key => $comment) {
+                                        printf("%-15s %-30s %-20s\n", $comment['username'], $comment['content'], $comment['createdAt']);
+                                    }
+
+                                    echo "\nType your comment: ";
+                                    $content = trim(fgets(STDIN));
+                                    $pubArticles[$index]->addComment($db->getUser(), $content);
+                                    echo "\ncomment added! It is now pending.\n";
+
+                                    $loop = false;
+                                } else {
+                                    echo "\narticle number not found.\n";
+                                }
+                                break;
+
+                            default:
+                                echo "Please choose a correct number\n";
+                                break;
+                        }
                     }
                     break;
                 case 2:

@@ -40,7 +40,6 @@ class Author extends User
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
-        $this->role = 'author';
         $this->createdAt = new DateTime('today');
         $this->lastLogin = null;
         $this->bio = $bio;
@@ -57,7 +56,6 @@ class Editor extends User
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
-        $this->role = 'editor';
         $this->createdAt = new DateTime('today');
         $this->lastLogin = null;
         $this->moderationLevel = $moderationLevel;
@@ -74,7 +72,6 @@ class Admin extends Editor
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
-        $this->role = 'editor';
         $this->createdAt = new DateTime('today');
         $this->lastLogin = null;
         $this->moderationLevel = 'cheif';
