@@ -112,6 +112,16 @@ class collection
         echo "-------------------------\n";
     }
 
+    public function updateCategory($categoryId, $name) {
+        foreach ($this->categories as $key => $category) {
+            if ($category->getId() == $categoryId) {
+                $this->categories[$key]->update($name);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function removeCategory($categoryId)
     {
         foreach ($this->categories as $key => $category) {
@@ -565,13 +575,25 @@ while (true) {
                         echo "choose a number:";
 
                         switch (trim(fgets(STDIN))) {
+                            case 0:
+                                $loop = false;
+                                break;
+                            case 3:
+                                echo "choose a category Id: ";
+                                $choosednId = (int)trim(fgets(STDIN));
+
+                                echo "choose new category name: ";
+                                $choosenName = trim(fgets(STDIN));
+
+                                if($db->updateCategory($choosednId, $choosenName)) echo "catgeory updated successfuly!";
+                                else echo "category wasn't found!\n";
+                                break;
                             case 4:
                                 echo "choose a category Id: ";
                                 $choosednId = (int)trim(fgets(STDIN));
 
                                 if($db->removeCategory($choosednId)) echo "catgeory deleted successfuly!";
                                 else echo "category wasn't found!\n";
-                                
                                 break;
                             
                             default:

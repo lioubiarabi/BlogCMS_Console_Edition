@@ -243,4 +243,8 @@ class Category
     {
         return $this->parentId;
     }
+
+    public function update($name) {
+        $this->name = $name;
+    }
 }
